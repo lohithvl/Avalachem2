@@ -1,60 +1,59 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
-//import "hardhat/console.sol";
-
 contract Assessment {
-    address payable public owner;
-    uint256 public balance;
-
-    event Deposit(uint256 amount);
-    event Withdraw(uint256 amount);
+    
+    uint256 public balance = 0;
 
     constructor(uint initBalance) payable {
-        owner = payable(msg.sender);
         balance = initBalance;
     }
 
-    function getBalance() public view returns(uint256){
+   
+    function getBalance() public view returns (uint256) {
         return balance;
     }
 
-    function deposit(uint256 _amount) public payable {
-        uint _previousBalance = balance;
-
-        // make sure this is the owner
-        require(msg.sender == owner, "You are not the owner of this account");
-
-        // perform transaction
-        balance += _amount;
-
-        // assert transaction completed successfully
-        assert(balance == _previousBalance + _amount);
-
-        // emit the event
-        emit Deposit(_amount);
-    }
-
-    // custom error
-    error InsufficientBalance(uint256 balance, uint256 withdrawAmount);
-
-    function withdraw(uint256 _withdrawAmount) public {
-        require(msg.sender == owner, "You are not the owner of this account");
-        uint _previousBalance = balance;
-        if (balance < _withdrawAmount) {
-            revert InsufficientBalance({
-                balance: balance,
-                withdrawAmount: _withdrawAmount
-            });
+    
+    function factorial(uint n) public returns (uint) {
+        balance=0;
+        if (n == 0) {
+            balance = 1; 
+            return balance;
+        }
+        
+        uint result = 1;
+        for (uint i = 1; i <= n; i++) {
+            result *= i;
+            balance += result;    
         }
 
-        // withdraw the given amount
-        balance -= _withdrawAmount;
+        return balance;  
+    }
 
-        // assert the balance is correct
-        assert(balance == (_previousBalance - _withdrawAmount));
+        function fibonacci(uint n) public returns (uint) {
+            balance=0;
+        if (n == 0){
+            balance = 0;
+            return balance;
+        }
 
-        // emit the event
-        emit Withdraw(_withdrawAmount);
+        if (n == 1){
+            balance = 1;
+            return balance;
+        }
+        
+        uint a = 0;
+        uint b = 1;
+        uint result;
+        
+        for (uint i = 2; i <= n; i++) {
+            result = a + b;
+            a = b;
+            b = result;
+            balance+=result;
+        }
+        
+        return balance;
     }
 }
